@@ -50,4 +50,9 @@ public class APIManager {
         call.enqueue(cb);
     }
 
+    public void postInscripcio(String json, Callback<InscripcionsExample> cb) {
+        Call<InscripcionsExample> call = mApiService.postRegistre(json);
+        call.enqueue(cb);
+    }
+
 }

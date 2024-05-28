@@ -9,14 +9,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.altbeacon.API.APIManager;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 import org.altbeacon.beaconreference.databinding.FragmentBeaconBinding;
+import org.altbeacon.models.getInscripcions.InscripcionsExample;
+import org.altbeacon.models.getInscripcions.InscripcionsInscripcion;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import java.sql.Timestamp;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +49,8 @@ public class beaconFragment
     private String circuit_id = "";
     private String categoria_id = "";
     private String checkpoint_id = "";
+
+    private List<InscripcionsInscripcion> lInscripcions = new ArrayList<>();
 
     // beacons
     public static final Region wildcardRegion = new Region("wildcardRegion", null, null, null);
@@ -68,6 +82,10 @@ public class beaconFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = FragmentBeaconBinding.inflate(getLayoutInflater());
+        
+        obtenirDadesBeacons();
+
+        String prova = formarJson("1", new Timestamp(System.currentTimeMillis()));
 
         // configurar beacons
         beaconManager = BeaconManager.getInstanceForApplication(getContext());
@@ -79,7 +97,9 @@ public class beaconFragment
 //                Log.i("BEACON", "The first beacon I see is about " + beacons.iterator().next().getId1() + " meters away.");
 
                 // Enviar a l'api
-                beaconTrobat(beacons.iterator().next().getId1().toString());
+                // En el moment en el que es troba el beacon es grava el timestamp:
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                beaconTrobat(beacons.iterator().next().getId1().toString(), timestamp);
 
             }
         };
@@ -99,15 +119,53 @@ public class beaconFragment
         return mBinding.getRoot();
     }
 
-    private void beaconTrobat(String idTrobada) {
-        formarJson();
+    private void obtenirDadesBeacons() {
+        APIManager.getInstance().getAllInscripcions(new Callback<InscripcionsExample>() {
+            @Override
+            public void onResponse(Call<InscripcionsExample> call, Response<InscripcionsExample> response) {
+                lInscripcions =  response.body().getInscripcions();
+                Log.d("XXX", "Code: " + lInscripcions.get(0).getBeacons().getBea_code());
+            }
+
+            @Override
+            public void onFailure(Call<InscripcionsExample> call, Throwable t) {
+                Log.d("ERROR", "Obtenir inscripcions - " + t.getMessage());
+            }
+        });
     }
 
-    private void formarJson() {
-        JSONObject json = new JSONObject();
+    private void beaconTrobat(String idTrobada, Timestamp timestamp) {
+        if(lInscripcions.size() > 0) {
+            for (InscripcionsInscripcion ii : lInscripcions){
+                if(ii.getBeacons().getBea_code().equals(idTrobada)) {
+                    String json = formarJson(ii.getInsId().toString(), timestamp);
 
+                    APIManager.getInstance().postInscripcio(json, new Callback<InscripcionsExample>() {
+                        @Override
+                        public void onResponse(Call<InscripcionsExample> call, Response<InscripcionsExample> response) {
+                            Log.d("XXX", "Inscripció pujada");
+                        }
+
+                        @Override
+                        public void onFailure(Call<InscripcionsExample> call, Throwable t) {
+                            Log.d("ERROR", "Inscripció pujada");
+                        }
+                    });
+                }
+            }
+        }
+
+    }
+
+    private String formarJson(String inscripcioId, Timestamp timestamp) {
+        JSONObject json = new JSONObject();
         try {
-            json.put("reg_ins_id", "a");
+            json.put("reg_ins_id", inscripcioId);
+            json.put("reg_chk_id", checkpoint_id);
+            json.put("reg_temps", timestamp);
+
+            return json.toString();
+
         } catch (JSONException e) {
             Log.d("ERROR", "Error al formar json " + e.getMessage());
             throw new RuntimeException();

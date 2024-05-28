@@ -35,7 +35,7 @@ public class InscripcionsInscripcion {
     private InscripcionsParticipant inscripcionsParticipant;
     @SerializedName("beacons")
     @Expose
-    private Object beacons;
+    private Beacon beacons;
 
     public Integer getInsId() {
         return insId;
@@ -109,11 +109,11 @@ public class InscripcionsInscripcion {
         this.inscripcionsParticipant = inscripcionsParticipant;
     }
 
-    public Object getBeacons() {
+    public Beacon getBeacons() {
         return beacons;
     }
 
-    public void setBeacons(Object beacons) {
+    public void setBeacons(Beacon beacons) {
         this.beacons = beacons;
     }
 
