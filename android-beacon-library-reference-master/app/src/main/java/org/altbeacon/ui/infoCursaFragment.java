@@ -17,13 +17,16 @@ import android.view.ViewGroup;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.altbeacon.adapters.CategoriesAdapter;
+import org.altbeacon.adapters.CheckpointsAdapter;
 import org.altbeacon.adapters.CircuitsAdapter;
 import org.altbeacon.beaconreference.R;
 import org.altbeacon.beaconreference.databinding.FragmentInfoCursaBinding;
 import org.altbeacon.models.Category;
+import org.altbeacon.models.Checkpoint;
 import org.altbeacon.models.Circuit;
 import org.altbeacon.models.Cursa;
 import org.altbeacon.selectedListeners.ICategoriaSelectedListener;
+import org.altbeacon.selectedListeners.ICheckpointSelectedListener;
 import org.altbeacon.selectedListeners.ICircuitSelectedListener;
 
 import java.util.ArrayList;
@@ -32,24 +35,30 @@ import java.util.List;
 
 public class infoCursaFragment
         extends Fragment
-        implements ICircuitSelectedListener, ICategoriaSelectedListener {
+        implements ICircuitSelectedListener, ICategoriaSelectedListener, ICheckpointSelectedListener {
 
     private static final String CLAUCURSA = "Cursa";
+    private static final String CLAUCIRCUIT = "Circuit";
+    private static final String CLAUCATEGORIA = "Categoria";
+    private static final String CLAUCHECKPOINT = "Checkpoint";
     private Cursa cursa;
     private FragmentInfoCursaBinding mBinding;
     private CircuitsAdapter mCircuitsAdapter;
     private CategoriesAdapter mCategoriesAdapter;
+    private CheckpointsAdapter mCheckpointsAdapter;
 
     private Context mContext;
 
     private List<Circuit> lCircuits = new ArrayList<>();
     private List<Category> lCats = new ArrayList<>();
+    private List<Checkpoint> lCheckpoints = new ArrayList<>();
 
     private infoCursaFragment thisFragment = this;
 
 
     private Circuit circuitSeleccionat = null;
     private Category categoriaSeleccionada =  null;
+    private Checkpoint checkpointSeleccionat =  null;
 
 
     public infoCursaFragment() {
@@ -82,10 +91,13 @@ public class infoCursaFragment
 //        mBinding.txvDataFi.setText(cursa.getCurDataFi());
 //        mBinding.txvLink.setText(cursa.getCurWeb());
 
+        mBinding.txvTitolCheckpoints.setVisibility(View.INVISIBLE);
         mBinding.txvTitolCategories.setVisibility(View.INVISIBLE);
         mBinding.txvTitolCircuits.setVisibility(View.INVISIBLE);
+        mBinding.rcvCheckpoints.setVisibility(View.INVISIBLE);
         mBinding.rcvCategories.setVisibility(View.INVISIBLE);
         mBinding.rcvCircuits.setVisibility(View.INVISIBLE);
+
 
         mBinding.btnParticipar.setOnClickListener(view -> {
             funcBtnParticipar();
@@ -93,16 +105,17 @@ public class infoCursaFragment
     }
 
     private void funcBtnParticipar() {
-        if ((circuitSeleccionat != null) && (categoriaSeleccionada != null)) {
+        if ((circuitSeleccionat != null) && (categoriaSeleccionada != null) && (checkpointSeleccionat != null)) {
             NavController nav = NavHostFragment.findNavController(thisFragment);
             Bundle bundle = new Bundle();
-//
-//            // Ha de ser la id
-//            bundle.putString(inscripcioFragment.CLAUCATEGORIA, categoriaSeleccionada.getCategoria().getCatNom());
-//            bundle.putString(inscripcioFragment.CLAUCIRCUIT, circuitSeleccionat.getCirId().toString());
-//            bundle.putString(inscripcioFragment.CLAUCURSA, cursa.getCurId().toString());
-//
-//            nav.navigate(R.id.action_infoCursaFragment_to_inscripcioFragment, bundle);
+
+            // Ha de ser la id
+            bundle.putString(CLAUCATEGORIA, categoriaSeleccionada.getCategoria().getCatId().toString());
+            bundle.putString(CLAUCIRCUIT, circuitSeleccionat.getCirId().toString());
+            bundle.putString(CLAUCURSA, cursa.getCurId().toString());
+            bundle.putString(CLAUCHECKPOINT, checkpointSeleccionat.getChkId().toString());
+
+            nav.navigate(R.id.action_infoCursaFragment_to_beaconFragment, bundle);
         } else {
             mostrar_circuits();
             mBinding.btnParticipar.setEnabled(false);
@@ -157,7 +170,7 @@ public class infoCursaFragment
 
 
     private void mostrarBoto() {
-        if ((circuitSeleccionat != null) && (categoriaSeleccionada != null)) {
+        if ((circuitSeleccionat != null) && (categoriaSeleccionada != null) && (checkpointSeleccionat != null)) {
             mBinding.btnParticipar.setEnabled(true);
         }
     }
@@ -187,7 +200,27 @@ public class infoCursaFragment
     public void onCircuitSelected(Circuit c) {
         circuitSeleccionat = c;
 
+        mostrarCheckpoints();
         mostrarCategories();
+        mostrarBoto();
+    }
+
+    private void mostrarCheckpoints() {
+        lCheckpoints = circuitSeleccionat.getCheckpoints();
+
+        mBinding.txvTitolCheckpoints.setVisibility(View.VISIBLE);
+        mBinding.rcvCheckpoints.setVisibility(View.VISIBLE);
+
+        mBinding.rcvCheckpoints.setLayoutManager(new LinearLayoutManager(infoCursaFragment.this.getContext(), LinearLayoutManager.VERTICAL, false));
+        mBinding.rcvCheckpoints.setHasFixedSize(true);
+        mCheckpointsAdapter = new CheckpointsAdapter(mContext, lCheckpoints, thisFragment);
+        mBinding.rcvCheckpoints.setAdapter(mCheckpointsAdapter);
+    }
+
+    @Override
+    public void onCheckpointSelected(Checkpoint c) {
+        checkpointSeleccionat = c;
+
         mostrarBoto();
     }
 }

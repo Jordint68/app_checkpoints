@@ -17,5 +17,14 @@
     <fragment
         android:id="@+id/infoCursaFragment"
         android:name="org.altbeacon.ui.infoCursaFragment"
-        android:label="infoCursaFragment" />
+        android:label="infoCursaFragment" >
+        <action
+            android:id="@+id/action_infoCursaFragment_to_beaconFragment"
+            app:destination="@id/beaconFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/beaconFragment"
+        android:name="org.altbeacon.ui.beaconFragment"
+        android:label="fragment_beacon"
+        tools:layout="@layout/fragment_beacon" />
 </navigation>

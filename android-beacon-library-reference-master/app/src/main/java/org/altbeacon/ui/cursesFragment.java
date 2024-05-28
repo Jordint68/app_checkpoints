@@ -121,6 +121,7 @@ public class cursesFragment extends Fragment {
             // Obtenim la llista de curses i la mostrem amb el recyclerview
             adapter = new CursesAdapter(cursesFragment.this.getContext(), curses, cursesFragment.this);
             binding.rcvCurses.setLayoutManager(new GridLayoutManager(cursesFragment.this.getContext(), 2, LinearLayoutManager.VERTICAL, false));
+            binding.rcvCurses.setHasFixedSize(true);
             binding.rcvCurses.setAdapter(adapter);
         }
     }

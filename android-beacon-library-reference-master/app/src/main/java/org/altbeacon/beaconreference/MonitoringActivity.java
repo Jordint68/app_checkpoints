@@ -21,6 +21,8 @@ import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
+import org.altbeacon.models.Cursa;
+import org.altbeacon.ui.infoCursaFragment;
 
 import java.util.Collection;
 
@@ -34,6 +36,11 @@ public class MonitoringActivity extends AppCompatActivity implements MonitorNoti
 	private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
 	private static final int PERMISSION_REQUEST_BACKGROUND_LOCATION = 2;
 
+
+	private int checkpoint_id;
+	private int cursa_id;
+	private int circuit_id;
+	private int categoria_id;
 
 
 	@Override
