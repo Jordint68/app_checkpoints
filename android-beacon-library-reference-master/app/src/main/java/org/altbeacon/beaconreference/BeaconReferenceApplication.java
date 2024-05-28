@@ -83,20 +83,20 @@ public class BeaconReferenceApplication extends Application implements MonitorNo
         */
 
 
-        Log.d(TAG, "setting up background monitoring in app onCreate");
-        beaconManager.addMonitorNotifier(this);
-
-        // If we were monitoring *different* regions on the last run of this app, they will be
-        // remembered.  In this case we need to disable them here
-        for (Region region: beaconManager.getMonitoredRegions()) {
-            beaconManager.stopMonitoring(region);
-        }
-
-        beaconManager.startMonitoring(wildcardRegion);
-
-        // If you wish to test beacon detection in the Android Emulator, you can use code like this:
-        // BeaconManager.setBeaconSimulator(new TimedBeaconSimulator() );
-        // ((TimedBeaconSimulator) BeaconManager.getBeaconSimulator()).createTimedSimulatedBeacons();
+//        Log.d(TAG, "setting up background monitoring in app onCreate");
+//        beaconManager.addMonitorNotifier(this);
+//
+//        // If we were monitoring *different* regions on the last run of this app, they will be
+//        // remembered.  In this case we need to disable them here
+//        for (Region region: beaconManager.getMonitoredRegions()) {
+//            beaconManager.stopMonitoring(region);
+//        }
+//
+//        beaconManager.startMonitoring(wildcardRegion);
+//
+//        // If you wish to test beacon detection in the Android Emulator, you can use code like this:
+//        // BeaconManager.setBeaconSimulator(new TimedBeaconSimulator() );
+//        // ((TimedBeaconSimulator) BeaconManager.getBeaconSimulator()).createTimedSimulatedBeacons();
     }
 
     @Override

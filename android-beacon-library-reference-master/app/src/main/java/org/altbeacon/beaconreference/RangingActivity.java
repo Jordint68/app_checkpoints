@@ -30,20 +30,20 @@ public class RangingActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        RangeNotifier rangeNotifier = new RangeNotifier() {
-            @Override
-            public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                if (beacons.size() > 0) {
-                    Log.d(TAG, "didRangeBeaconsInRegion called with beacon count:  "+beacons.size());
-                    Beacon firstBeacon = beacons.iterator().next();
-
-                    logToDisplay("The first beacon " + firstBeacon.toString() + " is about " + firstBeacon.getDistance() + " meters away.");
-                }
-            }
-
-        };
-        beaconManager.addRangeNotifier(rangeNotifier);
-        beaconManager.startRangingBeacons(BeaconReferenceApplication.wildcardRegion);
+//        RangeNotifier rangeNotifier = new RangeNotifier() {
+//            @Override
+//            public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
+//                if (beacons.size() > 0) {
+//                    Log.d(TAG, "didRangeBeaconsInRegion called with beacon count:  "+beacons.size());
+//                    Beacon firstBeacon = beacons.iterator().next();
+//
+//                    logToDisplay("The first beacon " + firstBeacon.toString() + " is about " + firstBeacon.getDistance() + " meters away.");
+//                }
+//            }
+//
+//        };
+//        beaconManager.addRangeNotifier(rangeNotifier);
+//        beaconManager.startRangingBeacons(BeaconReferenceApplication.wildcardRegion);
     }
 
     @Override

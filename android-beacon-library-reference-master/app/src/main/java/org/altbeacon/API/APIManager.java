@@ -2,6 +2,7 @@ package org.altbeacon.API;
 
 
 import org.altbeacon.models.ResponseGetCurses;
+import org.altbeacon.models.getInscripcions.InscripcionsExample;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,13 +40,13 @@ public class APIManager {
         call.enqueue(cb);
     }
 
-//    public void getCircuits(int codi_cursa, Callback<ResponseGetCircuits> cb) {
-//        Call<ResponseGetCircuits> call = mApiService.getCircuits(codi_cursa);
-//        call.enqueue(cb);
-//    }
-
     public void getAllCurses(Callback<ResponseGetCurses> cb) {
         Call<ResponseGetCurses> call = mApiService.getAllCurses();
+        call.enqueue(cb);
+    }
+
+    public void getAllInscripcions(Callback<InscripcionsExample> cb) {
+        Call<InscripcionsExample> call = mApiService.getAllInscripcions();
         call.enqueue(cb);
     }
 

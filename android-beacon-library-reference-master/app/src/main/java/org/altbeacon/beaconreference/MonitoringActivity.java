@@ -50,32 +50,32 @@ public class MonitoringActivity extends AppCompatActivity implements MonitorNoti
 		setContentView(R.layout.activity_monitoring);
 
 
-		verifyBluetooth();
-		requestPermissions();
-		BeaconManager bm = BeaconManager.getInstanceForApplication(this);
-		bm.addMonitorNotifier(this);
-
-		bm.addRangeNotifier(new RangeNotifier() {
-			@Override
-			public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-				if (beacons.size() > 0) {
-//					Log.i(TAG, "The first beacon I see is about "+beacons.iterator().next().getDistance()+" meters away.");
-					Log.i(TAG, "The first beacon I see is about "+beacons.iterator().next().getId3());
-				}
-			}
-		});
-
-		bm.startRangingBeacons(new Region("myRangingUniqueId", null, null, null));
-
-		// No need to start monitoring here because we already did it in
-		// BeaconReferenceApplication.onCreate
-		// check if we are currently inside or outside of that region to update the display
-		if (BeaconReferenceApplication.insideRegion) {
-			logToDisplay("Beacons are visible.");
-		}
-		else {
-			logToDisplay("No beacons are visible.");
-		}
+//		verifyBluetooth();
+//		requestPermissions();
+//		BeaconManager bm = BeaconManager.getInstanceForApplication(this);
+//		bm.addMonitorNotifier(this);
+//
+//		bm.addRangeNotifier(new RangeNotifier() {
+//			@Override
+//			public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
+//				if (beacons.size() > 0) {
+////					Log.i(TAG, "The first beacon I see is about "+beacons.iterator().next().getDistance()+" meters away.");
+//					Log.i(TAG, "The first beacon I see is about "+beacons.iterator().next().getId3());
+//				}
+//			}
+//		});
+//
+//		bm.startRangingBeacons(new Region("myRangingUniqueId", null, null, null));
+//
+//		// No need to start monitoring here because we already did it in
+//		// BeaconReferenceApplication.onCreate
+//		// check if we are currently inside or outside of that region to update the display
+//		if (BeaconReferenceApplication.insideRegion) {
+//			logToDisplay("Beacons are visible.");
+//		}
+//		else {
+//			logToDisplay("No beacons are visible.");
+//		}
 	}
 
 	@Override
