@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.MonitorNotifier;
@@ -27,16 +29,20 @@ import java.util.Collection;
  * @author dyoung
  * @author Matt Tyler
  */
-public class MonitoringActivity extends Activity implements MonitorNotifier {
+public class MonitoringActivity extends AppCompatActivity implements MonitorNotifier {
 	protected static final String TAG = "MonitoringActivity";
 	private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
 	private static final int PERMISSION_REQUEST_BACKGROUND_LOCATION = 2;
+
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_monitoring);
+
+
 		verifyBluetooth();
 		requestPermissions();
 		BeaconManager bm = BeaconManager.getInstanceForApplication(this);
@@ -47,7 +53,7 @@ public class MonitoringActivity extends Activity implements MonitorNotifier {
 			public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
 				if (beacons.size() > 0) {
 //					Log.i(TAG, "The first beacon I see is about "+beacons.iterator().next().getDistance()+" meters away.");
-					Log.i(TAG, "The first beacon I see is about "+beacons.iterator().next().getBluetoothAddress().replace(":", ""));
+					Log.i(TAG, "The first beacon I see is about "+beacons.iterator().next().getId3());
 				}
 			}
 		});
@@ -199,14 +205,14 @@ public class MonitoringActivity extends Activity implements MonitorNotifier {
 	}
 	public void onEnableClicked(View view) {
 		// This is a toggle.  Each time we tap it, we start or stop
-		Button button = (Button) findViewById(R.id.enableButton);
+//		Button button = (Button) findViewById(R.id.enableButton);
 		if (BeaconManager.getInstanceForApplication(this).getMonitoredRegions().size() > 0) {
 			BeaconManager.getInstanceForApplication(this).stopMonitoring(BeaconReferenceApplication.wildcardRegion);
-			button.setText("Enable Monitoring");
+//			button.setText("Enable Monitoring");
 		}
 		else {
 			BeaconManager.getInstanceForApplication(this).startMonitoring(BeaconReferenceApplication.wildcardRegion);
-			button.setText("Disable Monitoring");
+//			button.setText("Disable Monitoring");
 		}
 	}
 
@@ -250,9 +256,9 @@ public class MonitoringActivity extends Activity implements MonitorNotifier {
 		cumulativeLog += line+"\n";
     	runOnUiThread(new Runnable() {
     	    public void run() {
-    	    	EditText editText = (EditText)MonitoringActivity.this
-    					.findViewById(R.id.monitoringText);
-       	    	editText.setText(cumulativeLog);
+//    	    	EditText editText = (EditText)MonitoringActivity.this
+//    					.findViewById(R.id.monitoringText);
+//       	    	editText.setText(cumulativeLog);
     	    }
     	});
     }

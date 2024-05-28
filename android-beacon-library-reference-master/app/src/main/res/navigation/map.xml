@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/map"
+    app:startDestination="@id/cursesFragment">
+
+    <fragment
+        android:id="@+id/cursesFragment"
+        android:name="org.altbeacon.ui.cursesFragment"
+        android:label="fragment_curses"
+        tools:layout="@layout/fragment_curses" >
+        <action
+            android:id="@+id/action_cursesFragment_to_infoCursaFragment"
+            app:destination="@id/infoCursaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/infoCursaFragment"
+        android:name="org.altbeacon.ui.infoCursaFragment"
+        android:label="infoCursaFragment" />
+</navigation>
