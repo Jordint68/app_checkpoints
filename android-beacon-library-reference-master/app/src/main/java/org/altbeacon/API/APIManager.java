@@ -12,7 +12,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class APIManager {
     // Constant amb la la base url
 //    private final String BASE_URL = "https://raw.githubusercontent.com/acalvet2k23/racemanagerjson/main/";
-    private final String BASE_URL = "http://10.0.2.2/projecteApp/public/api/";
+//    private final String BASE_URL = "http://10.0.2.2/projecteApp/public/api/";
+    private final String BASE_URL = "http://192.168.3.216/projecteApp/public/api/";
 
     private static APIManager mInstance;
     private API mApiService;

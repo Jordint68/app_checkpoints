@@ -16,12 +16,14 @@ import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 import org.altbeacon.beaconreference.databinding.FragmentBeaconBinding;
+import org.altbeacon.models.getInscripcions.Beacon;
 import org.altbeacon.models.getInscripcions.InscripcionsExample;
 import org.altbeacon.models.getInscripcions.InscripcionsInscripcion;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import java.sql.Timestamp;
@@ -99,7 +101,13 @@ public class beaconFragment
                 // Enviar a l'api
                 // En el moment en el que es troba el beacon es grava el timestamp:
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+//                Iterator<org.altbeacon.beacon.Beacon> iteBeacons = beacons.iterator();
+////                while(beacons.iterator().hasNext()) {
+////                    beaconTrobat(iteBeacons.next().getId1().toString(), timestamp);
+////                }
+
                 beaconTrobat(beacons.iterator().next().getId1().toString(), timestamp);
+
 
             }
         };
@@ -109,12 +117,19 @@ public class beaconFragment
         mBinding.btnStart.setOnClickListener(v -> {
             beaconManager.startRangingBeacons(allBeaconsRegion);
             beaconManager.startMonitoring(wildcardRegion);
+//            Log.d("XXX", );
+            mBinding.btnStop.setEnabled(true);
+            mBinding.btnStart.setEnabled(false);
         });
 
         mBinding.btnStop.setOnClickListener(v -> {
             beaconManager.stopRangingBeacons(allBeaconsRegion);
             beaconManager.stopMonitoring(wildcardRegion);
+            mBinding.btnStop.setEnabled(false);
+            mBinding.btnStart.setEnabled(true);
         });
+
+        mBinding.btnStop.setEnabled(false);
 
         return mBinding.getRoot();
     }
@@ -135,23 +150,29 @@ public class beaconFragment
     }
 
     private void beaconTrobat(String idTrobada, Timestamp timestamp) {
+        Log.d("XXX", "ID: " + idTrobada + " Timestamp: " + timestamp);
+        String text = mBinding.txvLog.getText().toString();
+        mBinding.txvLog.setText(text + "\n" + "S'ha trobat el beacon amb id: " + idTrobada);
         if(lInscripcions.size() > 0) {
             for (InscripcionsInscripcion ii : lInscripcions){
-                if(ii.getBeacons().getBea_code().equals(idTrobada)) {
-                    String json = formarJson(ii.getInsId().toString(), timestamp);
+                if(ii.getBeacons() != null) {
+                    if(ii.getBeacons().getBea_code().equals(idTrobada)) {
+                        String json = formarJson(ii.getInsId().toString(), timestamp);
 
-                    APIManager.getInstance().postInscripcio(json, new Callback<InscripcionsExample>() {
-                        @Override
-                        public void onResponse(Call<InscripcionsExample> call, Response<InscripcionsExample> response) {
-                            Log.d("XXX", "Inscripció pujada");
-                        }
+                        APIManager.getInstance().postInscripcio(json, new Callback<InscripcionsExample>() {
+                            @Override
+                            public void onResponse(Call<InscripcionsExample> call, Response<InscripcionsExample> response) {
+                                Log.d("XXX", "Inscripció pujada");
+                            }
 
-                        @Override
-                        public void onFailure(Call<InscripcionsExample> call, Throwable t) {
-                            Log.d("ERROR", "Inscripció pujada");
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<InscripcionsExample> call, Throwable t) {
+                                Log.d("ERROR", "Inscripció pujada");
+                            }
+                        });
+                    }
                 }
+
             }
         }
 
